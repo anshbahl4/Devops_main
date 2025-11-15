@@ -39,7 +39,7 @@ pipeline {
                 script {
                     sh """
                         mkdir -p ~/.kube
-                        cp ${KUBECONFIG_CREDENTIALS} ~/.kube/config
+                        cp "$KUBECONFIG_CREDENTIALS" ~/.kube/config
                         sed -i 's#<your-image>#${IMAGE_NAME}#g' k8s/backend-deployment.yaml
                         kubectl apply -f k8s/
                     """
