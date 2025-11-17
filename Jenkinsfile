@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        KUBECONFIG_CREDENTIALS = credentials('kubeconfig')
-        IMAGE_NAME = "anshbahl7/node-backend:${env.BUILD_NUMBER}"
+        DOCKERHUB = credentials('dockerhub')
+        IMAGE_NAME = "anshbahl7/node-backend:${BUILD_NUMBER}"
     }
 
     stages {
@@ -17,33 +16,18 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh "docker build -t ${IMAGE_NAME} backend/"
-                }
+                sh """
+                    docker build -t ${IMAGE_NAME} backend/
+                """
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    sh """
-                        echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
-                        docker push ${IMAGE_NAME}
-                    """
-                }
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    sh """
-                        mkdir -p ~/.kube
-                        cp "$KUBECONFIG_CREDENTIALS" ~/.kube/config
-                        sed -i 's#<your-image>#${IMAGE_NAME}#g' k8s/backend-deployment.yaml
-                        kubectl apply -f k8s/
-                    """
-                }
+                sh """
+                    echo ${DOCKERHUB_PSW} | docker login -u ${DOCKERHUB_USR} --password-stdin
+                    docker push ${IMAGE_NAME}
+                """
             }
         }
     }

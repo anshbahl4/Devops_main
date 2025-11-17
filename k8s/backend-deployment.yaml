@@ -19,3 +19,6 @@ spec:
           image: anshbahl7/node-backend-1.0:latest
           ports:
             - containerPort: 5000
+
+
+
