@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const PORT = 5000;
 
-// Root endpoint
+
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello from Node.js running in Kubernetes!' });
+  res.json({ message: 'Thala for a reason' });
 });
 
-// Health check endpoint
+
 app.get('/health', (req, res) => {
   res.json({ status: 'UP' });
 });
